@@ -4,12 +4,7 @@ Napi::Object Addon::Init(Napi::Env env, Napi::Object exports) {
 
   Napi::HandleScope scope(env);
 
-  Napi::Function constructorFunction = DefineClass(env, "Addon", {
-    InstanceMethod("passArray", Addon::PassArray)
-  });
-
-  constructor = Napi::Persistent(constructorFunction);
-  constructor.SuppressDestruct();
+  exports.Set("passArray", Napi::Function::New(env, Addon::PassArray));
 
   return exports;
 }
@@ -35,9 +30,12 @@ class PassArrayAsyncWorker : public Napi::AsyncWorker {
     void Execute() {
       // This is where code would execute, but right now I don't really care
       // what happens here, just that we do SOME async work and then go to OnOk.
+      printf("In execute!\n");
     }
 
     void OnOK() {
+
+      printf("In OnOk!\n");
 
       Napi::Env env = Env();
       Napi::HandleScope scope(env);
@@ -62,6 +60,8 @@ class PassArrayAsyncWorker : public Napi::AsyncWorker {
 };
 
 Napi::Value Addon::PassArray(const Napi::CallbackInfo& info) {
+
+  printf("Passing array!\n");
   
   Napi::Env env = info.Env();
   Napi::HandleScope scope(env);
@@ -82,3 +82,5 @@ Napi::Object InitAll(Napi::Env env, Napi::Object exports) {
 
   return exports;
 }
+
+NODE_API_MODULE(addon_bindings, InitAll)

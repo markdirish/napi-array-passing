@@ -5,13 +5,14 @@ class ArrayPrinter : public Napi::ObjectWrap<ArrayPrinter> {
   friend class PrintArrayAsyncWorker;
 
   private:
-    Napi::Array array;
+    Napi::Reference<Napi::Array> array_reference;
 
   public:
     static Napi::FunctionReference constructor;
-
-    explicit ArrayPrinter(const Napi::CallbackInfo& info);
-
     static Napi::Object Init(Napi::Env env, Napi::Object exports);
+
+    ArrayPrinter(const Napi::CallbackInfo& info);
+    ~ArrayPrinter();
+
     Napi::Value PrintArray(const Napi::CallbackInfo& info);
 };
