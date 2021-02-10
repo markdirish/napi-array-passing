@@ -1,5 +1,5 @@
 #include <napi.h>
-#include <array_printer.h>
+#include "array_printer.h"
 
 class Addon : public Napi::ObjectWrap<Addon> {
 
